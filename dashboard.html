@@ -350,7 +350,7 @@ textarea.fi{resize:vertical;min-height:70px;}
     <!-- ══ CUSTOMERS ══ -->
     <div class="page" id="pg-customers">
       <div class="card"><div class="card-hd"><div class="card-ttl">👥 العملاء</div><span class="bdg bdg-pu" id="cus-count">0</span></div>
-        <div class="tw"><table><thead><tr><th>الاسم</th><th>الجوال</th><th>الطلبات</th><th>الإجمالي</th><th>تاريخ التسجيل</th></tr></thead><tbody id="cus-tbody"></tbody></table></div>
+        <div class="tw"><table><thead><tr><th>الاسم</th><th>البريد الإلكتروني</th><th>الطلبات</th><th>الإجمالي</th><th>تاريخ التسجيل</th></tr></thead><tbody id="cus-tbody"></tbody></table></div>
       </div>
     </div>
 
@@ -747,7 +747,7 @@ function stopRealtimeListeners(){_unsubs.forEach(u=>u&&u());_unsubs=[];}
 // ═══════════════════════════════════════
 //  CREDENTIALS (changeable)
 // ═══════════════════════════════════════
-let CREDS = { user:'aabbuuooamad@email.com', pass:'Aa121314@' };
+let CREDS = { user:'admin', pass:'1234' };
 try { const c=localStorage.getItem('dashCreds'); if(c) CREDS=JSON.parse(c); } catch(e) {}
 
 // ═══════════════════════════════════════
@@ -968,16 +968,14 @@ function completeOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;o.stat
 // ═══════════════════════════════════════
 async function renderCustomers(){
   document.getElementById('cus-tbody').innerHTML='<tr><td colspan="5" style="text-align:center;padding:1.5rem;color:var(--gr);">⏳ جاري التحميل...</td></tr>';
-  // 🔥 تحميل من Firestore
   let customers=[];
   try{customers=await fbLoadCustomers();}catch(e){}
-  // دمج مع بيانات الطلبات المحلية
-  orders.forEach(o=>{if(o.phone&&!customers.find(c=>c.phone===o.phone)){customers.push({name:o.name||'—',phone:o.phone,joinDate:'',orders:[]});}});
+  orders.forEach(o=>{if(o.email&&!customers.find(c=>c.email===o.email)){customers.push({name:o.name||'—',email:o.email,joinDate:'',orders:[]});}});
   document.getElementById('cus-count').textContent=customers.length+' عميل';
   document.getElementById('cus-tbody').innerHTML=customers.length?customers.map(x=>`
     <tr>
       <td style="font-weight:700;">${x.name||'—'}</td>
-      <td style="font-family:monospace;">${x.phone}</td>
+      <td style="font-family:monospace;font-size:.8rem;">${x.email||x.phone||'—'}</td>
       <td><span class="bdg bdg-bl">${(x.orders||[]).length} طلب</span></td>
       <td><strong style="color:var(--p);">${(x.orders||[]).reduce((s,o)=>s+(o.total||0),0)} ر.س</strong></td>
       <td style="font-size:.75rem;color:var(--gr);">${x.joinDate||'—'}</td>
@@ -998,7 +996,9 @@ function applyTheme(p,s,a,nv,bg,fb){document.getElementById('c-primary').value=p
 function loadHero(){const h=C.hero;['tag','l1','l2','desc','btn1','btn2','deco','s1v','s1l','s2v','s2l','s3v','s3l'].forEach(k=>document.getElementById('h-'+k).value=h[k]||'');}
 function loadAnnounce(){const an=C.announce;document.getElementById('an-on').checked=an.on;document.getElementById('an-items').value=(an.items||[]).join('\n');document.getElementById('an-speed').value=an.speed||28;}
 function loadTrust(){document.getElementById('trust-builder').innerHTML=C.trust.map((t,i)=>`<div style="display:flex;align-items:center;gap:.8rem;padding:.7rem;background:#f8f7ff;border:1px solid var(--bd);border-radius:10px;margin-bottom:.6rem;"><div class="ti-ic" style="font-size:1.5rem;">${t.icon}</div><div style="flex:1;display:flex;gap:.6rem;"><input type="text" class="fi" value="${t.icon}" maxlength="4" style="width:70px;" onchange="C.trust[${i}].icon=this.value"><input type="text" class="fi" value="${t.title}" placeholder="العنوان" onchange="C.trust[${i}].title=this.value"><input type="text" class="fi" value="${t.desc}" placeholder="الوصف" onchange="C.trust[${i}].desc=this.value"></div></div>`).join('');}
-function loadCats(){document.getElementById('cats-builder').innerHTML=C.cats.map((c,i)=>`<div style="display:flex;align-items:center;gap:.7rem;padding:.7rem;background:#f8f7ff;border:1px solid var(--bd);border-radius:10px;margin-bottom:.6rem;"><div style="font-size:1.5rem;">${c.icon}</div><div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;"><input type="text" class="fi" value="${c.label}" placeholder="اسم التصنيف" onchange="C.cats[${i}].label=this.value"><input type="text" class="fi" value="${c.icon}" maxlength="4" placeholder="أيقونة" onchange="C.cats[${i}].icon=this.value"><input type="text" class="fi" value="${c.count}" placeholder="مثل: 5 منتجات" onchange="C.cats[${i}].count=this.value"><input type="text" class="fi" value="${c.key}" placeholder="key مثل: electronics" onchange="C.cats[${i}].key=this.value"><input type="text" class="fi" value="${c.color}" placeholder="لون1,لون2" onchange="C.cats[${i}].color=this.value"></div></div>`).join('')+'<p class="fhint" style="margin-top:.5rem;">💡 يمكنك تعديل الألوان باستخدام أكواد hex مفصولة بفاصلة</p>';}
+function loadCats(){document.getElementById('cats-builder').innerHTML=C.cats.map((c,i)=>`<div style="display:flex;align-items:center;gap:.7rem;padding:.7rem;background:#f8f7ff;border:1px solid var(--bd);border-radius:10px;margin-bottom:.6rem;"><div style="font-size:1.5rem;">${c.icon}</div><div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;"><input type="text" class="fi" value="${c.label}" placeholder="اسم التصنيف" onchange="C.cats[${i}].label=this.value"><input type="text" class="fi" value="${c.icon}" maxlength="4" placeholder="أيقونة" onchange="C.cats[${i}].icon=this.value"><input type="text" class="fi" value="${c.count}" placeholder="مثل: 5 منتجات" onchange="C.cats[${i}].count=this.value"><input type="text" class="fi" value="${c.key}" placeholder="key مثل: electronics" onchange="C.cats[${i}].key=this.value"><input type="text" class="fi" value="${c.color}" placeholder="لون1,لون2" onchange="C.cats[${i}].color=this.value"></div><button onclick="rmCat(${i})" class="btn btn-dan btn-sm" style="flex-shrink:0;align-self:flex-start;">🗑️</button></div>`).join('')+'<button class="btn btn-pri btn-sm" style="margin-top:.8rem;width:100%;" onclick="addCat()">+ إضافة تصنيف جديد</button><p class="fhint" style="margin-top:.5rem;">💡 يمكنك تعديل الألوان باستخدام أكواد hex مفصولة بفاصلة</p>';}
+function addCat(){C.cats.push({label:'تصنيف جديد',icon:'🛍️',count:'0 منتجات',key:'new-cat-'+Date.now(),color:'#1e40af,#2563eb'});loadCats();notif('تم إضافة تصنيف جديد — عدّله واضغط حفظ','ok');}
+function rmCat(i){if(!confirm('حذف هذا التصنيف؟'))return;C.cats.splice(i,1);loadCats();notif('تم الحذف','ok');}
 function loadPromo(){const p=C.promo;document.getElementById('pr-on').checked=p.on;document.getElementById('pr-tag').value=p.tag;document.getElementById('pr-btn').value=p.btn;document.getElementById('pr-ttl').value=p.title;document.getElementById('pr-desc').value=p.desc;document.getElementById('pr-cat').value=p.cat;document.getElementById('pr-bg').value=p.bg;}
 function loadSocial(){document.getElementById('social-builder').innerHTML=C.social.map((s,i)=>`<div class="soc-row"><div class="soc-icon">${s.icon}</div><div class="soc-lbl">${s.label}</div><input type="text" class="soc-url" value="${s.url}" placeholder="https://..." onchange="C.social[${i}].url=this.value"><label class="switch" style="flex-shrink:0;"><input type="checkbox" ${s.on?'checked':''} onchange="C.social[${i}].on=this.checked"><span class="slider"></span></label></div>`).join('');}
 function loadMobileNav(){document.getElementById('mn-builder').innerHTML=C.mobileNav.map((item,i)=>`<div class="mn-builder-row"><input type="text" class="fi" style="width:65px;" value="${item.icon}" maxlength="4" placeholder="🏠" onchange="C.mobileNav[${i}].icon=this.value"><input type="text" class="fi" value="${item.label}" placeholder="التسمية" onchange="C.mobileNav[${i}].label=this.value"><input type="text" class="fi" value="${item.action}" placeholder="الإجراء" onchange="C.mobileNav[${i}].action=this.value"><button onclick="rmMN(${i})" class="btn btn-dan btn-sm">حذف</button></div>`).join('')+'<button class="btn btn-ghost btn-sm" style="margin-top:.6rem;" onclick="addMN()">+ إضافة زر</button>';}
