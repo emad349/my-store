@@ -296,20 +296,51 @@ html.dark .timer-badge{background:#1e2440;}
 html.dark .pfp-header{background:#131729;border-color:var(--bd);}
 .pfp-back{background:none;border:1px solid var(--bd);border-radius:9px;padding:.45rem .9rem;cursor:pointer;font-family:'Cairo',sans-serif;font-size:.85rem;color:var(--tx);display:flex;align-items:center;gap:.3rem;transition:all .2s;}
 .pfp-back:hover{border-color:var(--p);color:var(--p);}
+html.dark .pfp-back{background:#1e2440;border-color:var(--bd);color:var(--tx);}
 .pfp-title{font-size:1rem;font-weight:800;color:var(--nv);}
 html.dark .pfp-title{color:var(--tx);}
-.pfp-body{max-width:800px;margin:0 auto;padding:1.5rem;}
-.pfp-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#f0ebff,#e0f2fe);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:9rem;margin-bottom:1.5rem;}
-html.dark .pfp-img{background:linear-gradient(135deg,#1e2440,#172040);}
-.pfp-meta{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;margin-bottom:1.2rem;}
-.pfp-price-big{font-size:2rem;font-weight:900;color:var(--p);}
-.pfp-old{font-size:.9rem;color:var(--gr);text-decoration:line-through;margin-right:.5rem;}
-.pfp-disc{background:#fee2e2;color:var(--re);font-size:.75rem;font-weight:700;padding:.2rem .5rem;border-radius:6px;}
-.pfp-actions{display:flex;align-items:center;gap:.8rem;background:#f8f7ff;border-radius:14px;padding:1rem;margin-bottom:1.5rem;}
-html.dark .pfp-actions{background:#1e2440;}
-.pfp-add-btn{flex:1;background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border:none;padding:.85rem;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;}
-.pfp-add-btn:hover{opacity:.9;transform:translateY(-1px);}
+.pfp-body{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
+.pfp-layout{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;}
+@media(max-width:768px){.pfp-layout{grid-template-columns:1fr;gap:1.2rem;}}
+/* الصورة يمين */
+.pfp-gallery{position:sticky;top:80px;}
+.pfp-main-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#f0ebff,#e0f2fe);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:10rem;position:relative;overflow:hidden;border:1px solid var(--bd);}
+html.dark .pfp-main-img{background:linear-gradient(135deg,#1e2440,#172040);border-color:var(--bd);}
+.pfp-avail-badge{position:absolute;bottom:14px;left:14px;background:rgba(13,16,53,.85);color:var(--ac);font-size:.75rem;font-weight:700;padding:.35rem .8rem;border-radius:8px;display:flex;align-items:center;gap:.3rem;}
+/* المعلومات يسار */
+.pfp-cat-tag{display:inline-flex;align-items:center;background:rgba(109,40,217,.08);border:1px solid rgba(109,40,217,.15);color:var(--p);font-size:.75rem;font-weight:700;padding:.25rem .75rem;border-radius:50px;margin-bottom:.8rem;}
+.pfp-name{font-size:1.6rem;font-weight:900;color:var(--nv);line-height:1.3;margin-bottom:.7rem;}
+html.dark .pfp-name{color:var(--tx);}
+.pfp-rating-row{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--bd);}
+html.dark .pfp-rating-row{border-color:var(--bd);}
+.pfp-stars{color:var(--st);font-size:1rem;}
+.pfp-rcount{font-size:.82rem;color:var(--gr);}
+.pfp-price-wrap{margin-bottom:1.2rem;}
+.pfp-price-main{font-size:2.2rem;font-weight:900;color:var(--p);}
+.pfp-price-old{font-size:1rem;color:var(--gr);text-decoration:line-through;margin-right:.5rem;}
+.pfp-price-disc{background:#fee2e2;color:var(--re);font-size:.8rem;font-weight:800;padding:.25rem .6rem;border-radius:6px;margin-right:.4rem;}
+.pfp-desc{font-size:.92rem;color:var(--tx2);line-height:1.9;margin-bottom:1.2rem;}
+.pfp-digital-badge{background:rgba(109,40,217,.06);border:1px solid rgba(109,40,217,.18);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem;font-size:.88rem;color:var(--p);font-weight:700;}
+html.dark .pfp-digital-badge{background:rgba(109,40,217,.12);border-color:rgba(109,40,217,.25);}
+.pfp-features{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.4rem;}
+.pfp-feat{background:#f8f7ff;border:1px solid var(--bd);border-radius:10px;padding:.7rem .9rem;font-size:.82rem;color:var(--tx2);display:flex;align-items:center;gap:.5rem;}
+html.dark .pfp-feat{background:#1e2440;border-color:var(--bd);color:var(--tx2);}
+.pfp-buy-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;}
+.pfp-qty{display:flex;align-items:center;gap:.6rem;background:#f1f5f9;border-radius:10px;padding:.5rem .9rem;border:1px solid var(--bd);}
+html.dark .pfp-qty{background:#1e2440;border-color:var(--bd);}
+.pfp-qty button{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--p);font-weight:900;line-height:1;width:24px;text-align:center;}
+.pfp-qty span{font-size:1rem;font-weight:800;min-width:28px;text-align:center;color:var(--tx);}
+.pfp-add-btn{flex:1;background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border:none;padding:.9rem 1.5rem;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem;}
+.pfp-add-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 20px rgba(109,40,217,.3);}
+.pfp-revs{margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--bd);}
+html.dark .pfp-revs{border-color:var(--bd);}
 .pfp-divider{border:none;border-top:1px solid var(--bd);margin:1.5rem 0;}
+html.dark .pfp-divider{border-color:var(--bd);}
+/* حذف القديم */
+.pfp-img{display:none;}
+.pfp-meta{display:none;}
+.pfp-price-big{font-size:2rem;font-weight:900;color:var(--p);}
+.pfp-actions{display:none;}
 /* ── CATEGORY PAGE ── */
 #catPage{position:fixed;inset:0;background:var(--bg);z-index:600;overflow-y:auto;display:none;animation:slideIn .3s ease;}
 #catPage.open{display:block;}
@@ -395,9 +426,9 @@ const FIREBASE_CONFIG = {
 //  سجّل في emailjs.com ← My Account ← API Keys
 // ══════════════════════════════════════════════
 const EMAILJS_CONFIG = {
-  publicKey:   'pHWuJi7jJfbEkGsrh',    // من صفحة Account → API Keys
-  serviceId:   'service_4f3qbkm',    // من Email Services
-  templateId:  'template_7tjgtnl',   // من Email Templates
+  publicKey:   'YOUR_PUBLIC_KEY',    // من صفحة Account → API Keys
+  serviceId:   'YOUR_SERVICE_ID',    // من Email Services
+  templateId:  'YOUR_TEMPLATE_ID',   // من Email Templates
 };
 emailjs.init(EMAILJS_CONFIG.publicKey);
 </script>
@@ -1287,57 +1318,101 @@ function openProdPage(id){
   const cur=C.store.currency||'ر.س';
   const disc=p.oldPrice?Math.round((1-p.price/p.oldPrice)*100):0;
   const avail=p.codes?p.codes.filter(c=>!c.used).length:null;
+  const sold=avail===0;
   document.getElementById('pfpTitle').textContent=p.name;
-  // بناء محتوى الصفحة
+
   const existingRevs=(window._prodReviews&&window._prodReviews[id])||[];
   const revHtml=existingRevs.length
     ?existingRevs.map(r=>`<div class="rev-card"><div style="display:flex;align-items:center;justify-content:space-between;"><div><div class="rev-author">${r.name}</div><div class="rev-date">${r.date}</div></div><div style="color:var(--st);">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div></div><div class="rev-text">${r.text}</div></div>`).join('')
     :'<div style="color:var(--gr);font-size:.85rem;text-align:center;padding:1rem;">لا توجد تقييمات بعد — كن الأول!</div>';
+
+  // شارة البادج
+  const badgeHtml = p.badge
+    ?`<span class="pbdg ${p.badge==='new'?'bnn':p.badge==='sale'?'bns':'bnh'}" style="position:absolute;top:14px;right:14px;">${p.badge==='new'?'جديد':p.badge==='sale'?`-${disc}%`:'🔥 الأكثر'}</span>`:'';
+
+  // الكمية المتاحة
+  const availHtml = p.codeType!=='none'
+    ?`<div class="pfp-avail-badge">${p.codeType==='account'?'👤':'🔑'} ${avail} متاح</div>`:'';
+
   document.getElementById('pfpBody').innerHTML=`
-    <div class="pfp-img">${p.emoji}</div>
-    ${p.badge?`<span class="pbdg ${p.badge==='new'?'bnn':p.badge==='sale'?'bns':'bnh'}" style="display:inline-block;margin-bottom:.5rem;">${p.badge==='new'?'جديد':p.badge==='sale'?'تخفيض':'🔥 الأكثر'}</span>`:''}
-    <div class="pfp-meta">
-      <div>
-        <h2 style="font-size:1.3rem;font-weight:900;margin-bottom:.5rem;">${p.name}</h2>
-        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem;">
-          <span style="color:var(--st);font-size:1rem;">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
-          <span style="font-size:.82rem;color:var(--gr);">${p.rating} (${p.rCount} تقييم)</span>
-        </div>
+  <div class="pfp-layout">
+
+    <!-- الصورة — يمين -->
+    <div class="pfp-gallery">
+      <div class="pfp-main-img">
+        ${badgeHtml}
+        ${p.emoji}
+        ${availHtml}
+      </div>
+      <!-- مميزات سريعة تحت الصورة -->
+      <div class="pfp-features" style="margin-top:1rem;">
+        <div class="pfp-feat">⚡ تسليم فوري بعد الدفع</div>
+        <div class="pfp-feat">🔒 دفع آمن ومشفر</div>
+        <div class="pfp-feat">🎧 دعم فني 24/7</div>
+        <div class="pfp-feat">✅ ضمان سنة كاملة</div>
+      </div>
+    </div>
+
+    <!-- المعلومات — يسار -->
+    <div class="pfp-info">
+      <div class="pfp-cat-tag">🏷️ ${C.cats.find(c=>c.key===p.cat)?.label||'منتج رقمي'}</div>
+      <h1 class="pfp-name">${p.name}</h1>
+
+      <div class="pfp-rating-row">
+        <span class="pfp-stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
+        <span class="pfp-rcount">${p.rating} (${p.rCount} تقييم)</span>
+        ${p.codeType!=='none'?`<span style="margin-right:auto;font-size:.82rem;color:var(--gr);">👁 ${p.rCount*2}+ مشاهدة</span>`:''}
+      </div>
+
+      <div class="pfp-price-wrap">
+        ${p.oldPrice?`<span class="pfp-price-disc">-${disc}%</span><span class="pfp-price-old">${p.oldPrice} ${cur}</span>`:''}
+        <div class="pfp-price-main">${p.price} ${cur}</div>
+      </div>
+
+      <p class="pfp-desc">${p.desc}</p>
+
+      ${p.codeType!=='none'?`
+      <div class="pfp-digital-badge">
+        ${p.codeType==='account'?'👤':'🔑'}
         <div>
-          <span class="pfp-price-big">${p.price} ${cur}</span>
-          ${p.oldPrice?`<span class="pfp-old">${p.oldPrice} ${cur}</span><span class="pfp-disc">-${disc}%</span>`:''}
+          <div style="font-size:.9rem;">منتج رقمي — ${p.codeType==='account'?'حساب مشترك':'كود تفعيل'}</div>
+          <div style="font-size:.78rem;opacity:.7;font-weight:400;">تحصل على بياناتك فوراً بعد إتمام الدفع</div>
         </div>
-      </div>
-      ${p.codeType!=='none'?`<div style="background:rgba(109,40,217,.07);border:1px solid rgba(109,40,217,.15);border-radius:11px;padding:.6rem .9rem;font-size:.82rem;text-align:center;">${p.codeType==='account'?'👤':'🔑'}<br><strong>${avail}</strong><br><span style="font-size:.72rem;color:var(--gr);">متاح</span></div>`:''}
-    </div>
-    <p style="color:var(--tx2);font-size:.9rem;line-height:1.8;margin-bottom:1.2rem;">${p.desc}</p>
-    ${p.codeType!=='none'?`<div style="background:rgba(109,40,217,.06);border:1px solid rgba(109,40,217,.15);border-radius:11px;padding:.8rem 1rem;margin-bottom:1rem;font-size:.85rem;">${p.codeType==='account'?'👤':'🔑'} <strong>منتج رقمي</strong> — تحصل فوراً بعد الدفع.</div>`:''}
-    <div class="pfp-actions">
-      <div style="display:flex;align-items:center;gap:.6rem;background:#fff;border-radius:10px;padding:.5rem .8rem;border:1px solid var(--bd);">
-        <button onclick="pfpChQ(-1)" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--p);font-weight:900;line-height:1;">−</button>
-        <span id="pfpQty" style="font-size:1rem;font-weight:800;min-width:24px;text-align:center;">1</span>
-        <button onclick="pfpChQ(1)" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--p);font-weight:900;line-height:1;">+</button>
-      </div>
-      <button class="pfp-add-btn" onclick="pfpAddToCart()">🛒 إضافة للسلة</button>
-    </div>
-    <hr class="pfp-divider">
-    <div class="rev-section">
-      <div class="rev-hd"><div class="rev-ttl">⭐ التقييمات</div></div>
-      <div id="pfpRevList">${revHtml}</div>
-      ${isLoggedIn?`
-      <div class="rev-form">
-        <div style="font-size:.88rem;font-weight:700;margin-bottom:.5rem;">أضف تقييمك</div>
-        <div class="rev-stars-inp" id="pfpStarsInp">
-          ${[1,2,3,4,5].map(s=>`<span class="rev-star" data-s="${s}" onclick="pfpSetStar(${s})">★</span>`).join('')}
+      </div>`:''}
+
+      ${sold?`<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:12px;padding:1rem;text-align:center;color:var(--re);font-weight:800;margin-bottom:1rem;">⛔ نفد المخزون</div>`:`
+      <div class="pfp-buy-row">
+        <div class="pfp-qty">
+          <button onclick="pfpChQ(-1)">−</button>
+          <span id="pfpQty">1</span>
+          <button onclick="pfpChQ(1)">+</button>
         </div>
-        <textarea class="fi" id="pfpRevText" placeholder="شاركنا تجربتك مع هذا المنتج..." rows="3" style="margin-bottom:.7rem;"></textarea>
-        <button class="btn-pri" style="width:100%;" onclick="pfpSubmitRev(${p.id})">نشر التقييم ✓</button>
-      </div>`:`<div style="text-align:center;font-size:.82rem;color:var(--gr);margin-top:.8rem;"><span style="color:var(--p);cursor:pointer;font-weight:700;" onclick="closeSheet('pdSheet');closeProdPage();openSheet('loginSheet')">سجّل دخولك</span> لإضافة تقييم</div>`}
-    </div>`;
+        <button class="pfp-add-btn" onclick="pfpAddToCart()">🛒 أضف للسلة</button>
+      </div>`}
+
+    </div>
+  </div>
+
+  <!-- التقييمات — تحت العمودين -->
+  <div class="pfp-revs">
+    <div class="rev-hd"><div class="rev-ttl">⭐ تقييمات العملاء (${existingRevs.length})</div></div>
+    <div id="pfpRevList">${revHtml}</div>
+    ${isLoggedIn?`
+    <div class="rev-form">
+      <div style="font-size:.88rem;font-weight:700;margin-bottom:.5rem;">أضف تقييمك</div>
+      <div class="rev-stars-inp" id="pfpStarsInp">
+        ${[1,2,3,4,5].map(s=>`<span class="rev-star" data-s="${s}" onclick="pfpSetStar(${s})">★</span>`).join('')}
+      </div>
+      <textarea class="fi" id="pfpRevText" placeholder="شاركنا تجربتك مع هذا المنتج..." rows="3" style="margin-bottom:.7rem;"></textarea>
+      <button class="btn-pri" style="width:100%;" onclick="pfpSubmitRev(${p.id})">نشر التقييم ✓</button>
+    </div>`:`<div style="text-align:center;font-size:.82rem;color:var(--gr);margin-top:.8rem;"><span style="color:var(--p);cursor:pointer;font-weight:700;" onclick="closeProdPage();openSheet('loginSheet')">سجّل دخولك</span> لإضافة تقييم</div>`}
+  </div>`;
+
   history.pushState({page:'product',id},'',`#product-${id}`);
   document.getElementById('prodFullPage').classList.add('open');
   document.body.style.overflow='hidden';
   window.scrollTo(0,0);
+  loadProdReviews(id).then(()=>openProdPage._refreshRevs&&openProdPage._refreshRevs(id));
 }
 function closeProdPage(){
   document.getElementById('prodFullPage').classList.remove('open');
