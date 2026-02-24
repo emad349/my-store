@@ -394,13 +394,6 @@ const FIREBASE_CONFIG = {
 //  ⚙️ EmailJS CONFIG — ضع بياناتك هنا
 //  سجّل في emailjs.com ← My Account ← API Keys
 // ══════════════════════════════════════════════
-const EMAILJS_CONFIG = {
-  publicKey:   'pHWuJi7jJfbEkGsrh',    // من صفحة Account → API Keys
-  serviceId:   'service_4f3qbkm',    // من Email Services
-  templateId:  'template_16afteh',   // من Email Templates
-};
-emailjs.init(EMAILJS_CONFIG.publicKey);
-</script>
 
 
 <div id="announceBar"><div class="atrack" id="atrack"></div></div>
@@ -901,17 +894,50 @@ async function doSendOTP(isResend=false){
     });
 
     // إرسال الرمز عبر EmailJS
- await emailjs.send(
-  EMAILJS_CONFIG.serviceId,
-  EMAILJS_CONFIG.templateId,
-  {
-    to_email      : email,   // <— هذا ضروري
-    otp_code      : code,
-    store_name    : C?.meta?.name || 'متجري',
-    expiry_min    : '10'
-  }
-);
+import emailjs from '@emailjs/browser';
 
+// إعدادات EmailJS
+const EMAILJS_CONFIG = {
+  publicKey:   'pHWuJi7jJfbEkGsrh',   
+  serviceId:   'service_4f3qbkm',    
+  templateId:  'template_16afteh',   
+};
+
+// دالة لإرسال OTP عبر الإيميل
+async function sendOtpEmail(email, code, storeName) {
+  // التحقق من أن البريد صالح
+  if (!email || !email.includes('@')) {
+    console.error("خطأ: البريد الإلكتروني غير صالح!");
+    return false;
+  }
+
+  // إرسال الإيميل داخل try/catch
+  try {
+    await emailjs.send(
+      EMAILJS_CONFIG.serviceId,
+      EMAILJS_CONFIG.templateId,
+      {
+        to_email   : email,                    // البريد المستقبل
+        otp_code   : code,                     // كود التحقق
+        store_name : storeName || 'متجري',     // اسم المتجر
+        expiry_min : '10'                       // وقت صلاحية الكود
+      },
+      EMAILJS_CONFIG.publicKey
+    );
+    console.log("✅ تم إرسال الإيميل بنجاح!");
+    return true;
+  } catch (err) {
+    console.error("❌ خطأ في إرسال الإيميل:", err);
+    return false;
+  }
+}
+
+// مثال استخدام
+const userEmail = 'user@example.com';
+const otpCode   = '123456';
+const storeName = 'متجري';
+
+sendOtpEmail(userEmail, otpCode, storeName);
     // الانتقال للخطوة الثانية
     document.getElementById('ls1').style.display='none';
     document.getElementById('ls2').style.display='block';
