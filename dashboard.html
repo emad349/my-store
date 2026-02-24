@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم — متجري</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
 :root{
   --p:#7c3aed;--p2:#6d28d9;--s:#2563eb;
@@ -620,6 +624,127 @@ textarea.fi{resize:vertical;min-height:70px;}
 
 <script>
 // ═══════════════════════════════════════
+//  🔥 FIREBASE CONFIG & INIT
+// ═══════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAMpqsqJtZ5OIDDPyn64VUUZssEkaVzy5s",
+  authDomain:        "my-store-6a072.firebaseapp.com",
+  projectId:         "my-store-6a072",
+  storageBucket:     "my-store-6a072.firebasestorage.app",
+  messagingSenderId: "637762823797",
+  appId:             "1:637762823797:web:e01355f7d37c5080f07a3c"
+};
+firebase.initializeApp(FIREBASE_CONFIG);
+const fbDb = firebase.firestore();
+
+// ── مؤشر تحميل Firebase ──
+function fbLoading(on){
+  let el=document.getElementById('fb-loading');
+  if(!el){el=document.createElement('div');el.id='fb-loading';el.style.cssText='position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#0d1035;color:#a78bfa;font-family:Cairo,sans-serif;font-size:.8rem;font-weight:700;padding:.4rem 1.1rem;border-radius:50px;z-index:9999;display:none;box-shadow:0 4px 20px rgba(0,0,0,.3);';el.textContent='🔥 جاري المزامنة مع Firebase...';document.body.appendChild(el);}
+  el.style.display=on?'block':'none';
+}
+
+// ── قراءة الإعدادات من Firestore ──
+async function fbLoadConfig(){
+  try{
+    fbLoading(true);
+    const doc=await fbDb.collection('storeSettings').doc('config').get();
+    if(doc.exists){
+      const data=doc.data();
+      const out=JSON.parse(JSON.stringify(DEF));
+      for(const k in data){if(data[k]!==null&&typeof data[k]==='object'&&!Array.isArray(data[k]))out[k]=Object.assign({},DEF[k]||{},data[k]);else out[k]=data[k];}
+      try{localStorage.setItem('storeConfig',JSON.stringify(out));}catch(e){}
+      return out;
+    }
+  }catch(e){console.warn('fbLoadConfig:',e);}
+  finally{fbLoading(false);}
+  return null;
+}
+
+// ── حفظ الإعدادات في Firestore ──
+async function fbSaveConfig(cfg){
+  try{await fbDb.collection('storeSettings').doc('config').set(cfg);}
+  catch(e){console.warn('fbSaveConfig:',e);}
+}
+
+// ── قراءة المنتجات من Firestore ──
+async function fbLoadProducts(){
+  try{
+    const doc=await fbDb.collection('storeData').doc('products').get();
+    if(doc.exists&&doc.data().list){
+      const list=doc.data().list;
+      try{localStorage.setItem('storeProducts',JSON.stringify(list));}catch(e){}
+      return list;
+    }
+  }catch(e){console.warn('fbLoadProducts:',e);}
+  return null;
+}
+
+// ── حفظ المنتجات في Firestore ──
+async function fbSaveProducts(prods){
+  try{await fbDb.collection('storeData').doc('products').set({list:prods,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});}
+  catch(e){console.warn('fbSaveProducts:',e);}
+}
+
+// ── قراءة الطلبات من Firestore ──
+async function fbLoadOrders(){
+  try{
+    const snap=await fbDb.collection('orders').orderBy('savedAt','desc').limit(200).get();
+    return snap.docs.map(d=>d.data());
+  }catch(e){
+    // إذا لم يكن index موجوداً بعد، نقرأ بدون ترتيب
+    try{const snap=await fbDb.collection('orders').limit(200).get();return snap.docs.map(d=>d.data());}catch(e2){return[];}
+  }
+}
+
+// ── قراءة العملاء من Firestore ──
+async function fbLoadCustomers(){
+  try{
+    const snap=await fbDb.collection('customers').limit(500).get();
+    return snap.docs.map(d=>d.data());
+  }catch(e){return[];}
+}
+
+// ── مستمع لحظي — المنتجات والطلبات ──
+let _unsubs=[];
+function startRealtimeListeners(){
+  // مستمع المنتجات
+  const u1=fbDb.collection('storeData').doc('products').onSnapshot(doc=>{
+    if(doc.exists&&doc.data().list){
+      const newList=doc.data().list;
+      // تحديث فقط إذا تغيّر الكونتنت
+      if(JSON.stringify(newList)!==JSON.stringify(products)){
+        products=newList;
+        try{localStorage.setItem('storeProducts',JSON.stringify(products));}catch(e){}
+        // تحديث واجهة الداش إذا كانت مفتوحة
+        const actPage=document.querySelector('.page.act');
+        if(actPage){
+          const pid=actPage.id.replace('pg-','');
+          if(pid==='products')renderProdsTable();
+          if(pid==='codes')renderCodesManager();
+          if(pid==='dash')refreshDash();
+        }
+      }
+    }
+  },e=>console.warn('products listener:',e));
+
+  // مستمع الطلبات
+  const u2=fbDb.collection('orders').limit(200).onSnapshot(snap=>{
+    orders=snap.docs.map(d=>d.data());
+    orders.sort((a,b)=>(b.savedAt?.seconds||0)-(a.savedAt?.seconds||0));
+    const actPage=document.querySelector('.page.act');
+    if(actPage){
+      const pid=actPage.id.replace('pg-','');
+      if(pid==='orders')renderOrdersTable();
+      if(pid==='dash')refreshDash();
+    }
+  },e=>console.warn('orders listener:',e));
+
+  _unsubs=[u1,u2];
+}
+function stopRealtimeListeners(){_unsubs.forEach(u=>u&&u());_unsubs=[];}
+
+// ═══════════════════════════════════════
 //  CREDENTIALS (changeable)
 // ═══════════════════════════════════════
 let CREDS = { user:'admin', pass:'1234' };
@@ -656,26 +781,48 @@ let editingProdId = null;
 let codesTab = 'all';
 
 function loadConfig() {
+  // قراءة من localStorage كقيمة مبدئية (سريعة)، Firestore يحدّث بعد اللوقن
   try { const s=localStorage.getItem('storeConfig'); if(s){const p=JSON.parse(s);const o=JSON.parse(JSON.stringify(DEF));for(const k in p){if(p[k]!==null&&typeof p[k]==='object'&&!Array.isArray(p[k]))o[k]=Object.assign({},DEF[k]||{},p[k]);else o[k]=p[k];}return o;} } catch(e) {}
   return JSON.parse(JSON.stringify(DEF));
 }
-function saveConfig() { try{localStorage.setItem('storeConfig',JSON.stringify(C));}catch(e){} }
+function saveConfig() {
+  try{localStorage.setItem('storeConfig',JSON.stringify(C));}catch(e){}
+  fbSaveConfig(C); // 🔥 Firestore
+}
 
-function loadProducts() { try{const s=localStorage.getItem('storeProducts');if(s)products=JSON.parse(s);}catch(e){} if(!products.length)products=[{id:1,name:'سماعات لاسلكية Pro',price:249,oldPrice:320,desc:'سماعات بلوتوث بجودة صوت استثنائية.',emoji:'🎧',cat:'electronics',badge:'sale',rating:4.8,rCount:124,featured:true,active:true,codeType:'code',codes:[{val:'AUDIO-X71K',used:false},{val:'AUDIO-M89P',used:false}]},{id:2,name:'ساعة ذكية Elite',price:599,oldPrice:750,desc:'ساعة ذكية مع متابعة صحية شاملة.',emoji:'⌚',cat:'electronics',badge:'hot',rating:4.9,rCount:89,featured:true,active:true,codeType:'account',codes:[{user:'elite@watch.com',pass:'Watch@2025',note:'ريجن SA',used:false}]},{id:3,name:'حقيبة جلد فاخرة',price:380,desc:'حقيبة يد من الجلد الطبيعي.',emoji:'👜',cat:'fashion',badge:'new',rating:4.7,rCount:56,featured:false,active:true,codeType:'none',codes:[]},{id:4,name:'عطر Noir Luxe',price:320,oldPrice:400,desc:'عطر فاخر بتركيبة شرقية.',emoji:'🌹',cat:'accessories',badge:'sale',rating:4.6,rCount:78,featured:true,active:true,codeType:'code',codes:[{val:'NOIR-AA1',used:false},{val:'NOIR-BB2',used:false}]}];}
-function saveProducts() { try{localStorage.setItem('storeProducts',JSON.stringify(products));}catch(e){} }
+function loadProductsLocal() { try{const s=localStorage.getItem('storeProducts');if(s)products=JSON.parse(s);}catch(e){} if(!products.length)products=[{id:1,name:'سماعات لاسلكية Pro',price:249,oldPrice:320,desc:'سماعات بلوتوث بجودة صوت استثنائية.',emoji:'🎧',cat:'electronics',badge:'sale',rating:4.8,rCount:124,featured:true,active:true,codeType:'code',codes:[{val:'AUDIO-X71K',used:false},{val:'AUDIO-M89P',used:false}]},{id:2,name:'ساعة ذكية Elite',price:599,oldPrice:750,desc:'ساعة ذكية مع متابعة صحية شاملة.',emoji:'⌚',cat:'electronics',badge:'hot',rating:4.9,rCount:89,featured:true,active:true,codeType:'account',codes:[{user:'elite@watch.com',pass:'Watch@2025',note:'ريجن SA',used:false}]},{id:3,name:'حقيبة جلد فاخرة',price:380,desc:'حقيبة يد من الجلد الطبيعي.',emoji:'👜',cat:'fashion',badge:'new',rating:4.7,rCount:56,featured:false,active:true,codeType:'none',codes:[]},{id:4,name:'عطر Noir Luxe',price:320,oldPrice:400,desc:'عطر فاخر بتركيبة شرقية.',emoji:'🌹',cat:'accessories',badge:'sale',rating:4.6,rCount:78,featured:true,active:true,codeType:'code',codes:[{val:'NOIR-AA1',used:false},{val:'NOIR-BB2',used:false}]}];}
+function saveProducts() {
+  try{localStorage.setItem('storeProducts',JSON.stringify(products));}catch(e){}
+  fbSaveProducts(products); // 🔥 Firestore
+}
 
 // ═══════════════════════════════════════
 //  LOGIN
 // ═══════════════════════════════════════
-function doLogin() {
+async function doLogin() {
   if(document.getElementById('lu').value===CREDS.user&&document.getElementById('lp').value===CREDS.pass){
     document.getElementById('loginPage').style.display='none';
     document.getElementById('app').style.display='flex';
-    loadProducts();refreshDash();
+
+    // 🔥 تحميل من Firestore أولاً
+    notif('🔥 جاري تحميل البيانات...','');
+    fbLoading(true);
+    try{
+      const [fbCfg, fbProds, fbOrds] = await Promise.all([fbLoadConfig(), fbLoadProducts(), fbLoadOrders()]);
+      if(fbCfg){ C=fbCfg; }
+      if(fbProds&&fbProds.length){ products=fbProds; }
+      else { loadProductsLocal(); }
+      if(fbOrds.length){ orders=fbOrds; }
+    }catch(e){ loadProductsLocal(); }
+    fbLoading(false);
+
+    startRealtimeListeners(); // 🔥 تحديث لحظي
+    refreshDash();
+    notif('✓ تم التحميل من Firebase','ok');
   } else { notif('❌ بيانات خاطئة','err'); }
 }
 document.getElementById('lp').addEventListener('keyup',e=>{if(e.key==='Enter')doLogin();});
-function doLogout(){document.getElementById('app').style.display='none';document.getElementById('loginPage').style.display='flex';}
+function doLogout(){stopRealtimeListeners();document.getElementById('app').style.display='none';document.getElementById('loginPage').style.display='flex';}
 function saveAccount(){
   const u=document.getElementById('acc-user').value;
   const p=document.getElementById('acc-pass').value;
@@ -819,13 +966,13 @@ function completeOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;o.stat
 // ═══════════════════════════════════════
 //  CUSTOMERS
 // ═══════════════════════════════════════
-function renderCustomers(){
-  // Read from storeCustomers (saved by store.html)
-  let custDB={};
-  try{custDB=JSON.parse(localStorage.getItem('storeCustomers')||'{}');}catch(e){}
-  const customers=Object.values(custDB);
-  // Also merge from dashboard orders array
-  orders.forEach(o=>{if(!custDB[o.phone]){customers.push({name:o.name,phone:o.phone,joinDate:'',orders:[]});}});
+async function renderCustomers(){
+  document.getElementById('cus-tbody').innerHTML='<tr><td colspan="5" style="text-align:center;padding:1.5rem;color:var(--gr);">⏳ جاري التحميل...</td></tr>';
+  // 🔥 تحميل من Firestore
+  let customers=[];
+  try{customers=await fbLoadCustomers();}catch(e){}
+  // دمج مع بيانات الطلبات المحلية
+  orders.forEach(o=>{if(o.phone&&!customers.find(c=>c.phone===o.phone)){customers.push({name:o.name||'—',phone:o.phone,joinDate:'',orders:[]});}});
   document.getElementById('cus-count').textContent=customers.length+' عميل';
   document.getElementById('cus-tbody').innerHTML=customers.length?customers.map(x=>`
     <tr>
@@ -907,7 +1054,19 @@ function notif(msg,type=''){const el=document.getElementById('notif');el.textCon
 //  INIT
 // ═══════════════════════════════════════
 document.getElementById('app').style.display='none';
-loadProducts();
+loadProductsLocal();
+
+// ── إضافة شارة Firebase في الـ sidebar ──
+(function(){
+  const foot=document.querySelector('.sb-foot');
+  if(foot){
+    const badge=document.createElement('div');
+    badge.style.cssText='background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:.45rem .8rem;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:rgba(255,255,255,.5);';
+    badge.innerHTML='🔥 <span style="color:#a78bfa;font-weight:700;">Firebase</span> متصل — my-store-6a072';
+    foot.insertBefore(badge,foot.firstChild);
+  }
+})();
+
 </script>
 </body>
 </html>

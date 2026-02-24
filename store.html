@@ -454,7 +454,9 @@ function initRecaptcha() {
   window._rcV.render();
 }
 
-// ════════ DEFAULT CONFIG ════════
+// ═══════════════════════════════
+//  DEFAULT CONFIG
+// ═══════════════════════════════
 const DEF = {
   meta:{ name:'متجري', logoLetter:'م', logoText:'متجري', tagline:'تسوق بذوق', logoImg:'' },
   colors:{ primary:'#7c3aed', secondary:'#2563eb', navy:'#0d1035', navy2:'#141847', accent:'#a78bfa', bg:'#f8f7ff', footerBg:'#0d1035' },
@@ -476,7 +478,7 @@ function loadCfg(){
   try{const s=localStorage.getItem('storeConfig');if(s){const p=JSON.parse(s);const o=JSON.parse(JSON.stringify(DEF));for(const k in p){if(p[k]!==null&&typeof p[k]==='object'&&!Array.isArray(p[k]))o[k]=Object.assign({},DEF[k]||{},p[k]);else o[k]=p[k];}return o;}}catch(e){}
   return JSON.parse(JSON.stringify(DEF));
 }
-const C=loadCfg();
+let C=loadCfg();
 
 (function applyColors(){
   const r=document.documentElement.style,col=C.colors;
@@ -503,7 +505,63 @@ let cart=[], isLoggedIn=false, currentCat='all', currentPd=null, pdQty=1;
 let currentUser=null; // {uid, name, phone, joinDate}
 let _confirmResult=null;
 
-// ════════ 🔥 FIREBASE HELPERS ════════
+// ═══════════════════════════════
+//  🔥 FIRESTORE — مستمعات لحظية
+// ═══════════════════════════════
+function startStoreListeners(){
+  // مستمع الإعدادات — أي تغيير من الداش يُحدّث المتجر فوراً
+  fbDb.collection('storeSettings').doc('config').onSnapshot(doc=>{
+    if(!doc.exists)return;
+    const data=doc.data();
+    const out=JSON.parse(JSON.stringify(DEF));
+    for(const k in data){if(data[k]!==null&&typeof data[k]==='object'&&!Array.isArray(data[k]))out[k]=Object.assign({},DEF[k]||{},data[k]);else out[k]=data[k];}
+    C=out;
+    try{localStorage.setItem('storeConfig',JSON.stringify(C));}catch(e){}
+    // تطبيق الألوان وإعادة بناء المتجر
+    const r=document.documentElement.style,col=C.colors;
+    r.setProperty('--p',col.primary);r.setProperty('--s',col.secondary);
+    r.setProperty('--nv',col.navy);r.setProperty('--nv2',col.navy2||col.navy);
+    r.setProperty('--ac',col.accent);r.setProperty('--bg',col.bg);
+    buildAll();updateLoginBtn();
+  },e=>console.warn('store config listener:',e));
+
+  // مستمع المنتجات — تحديث لحظي عند إضافة/حذف/تعديل منتج أو كود
+  fbDb.collection('storeData').doc('products').onSnapshot(doc=>{
+    if(!doc.exists||!doc.data().list)return;
+    products=doc.data().list;
+    try{localStorage.setItem('storeProducts',JSON.stringify(products));}catch(e){}
+    refreshProds();
+  },e=>console.warn('store products listener:',e));
+}
+
+// تحميل أولي من Firestore قبل البناء
+async function initStore(){
+  try{
+    const [cfgDoc,prodsDoc]=await Promise.all([
+      fbDb.collection('storeSettings').doc('config').get(),
+      fbDb.collection('storeData').doc('products').get()
+    ]);
+    if(cfgDoc.exists){
+      const data=cfgDoc.data();
+      const out=JSON.parse(JSON.stringify(DEF));
+      for(const k in data){if(data[k]!==null&&typeof data[k]==='object'&&!Array.isArray(data[k]))out[k]=Object.assign({},DEF[k]||{},data[k]);else out[k]=data[k];}
+      C=out;
+      try{localStorage.setItem('storeConfig',JSON.stringify(C));}catch(e){}
+      const r=document.documentElement.style,col=C.colors;
+      r.setProperty('--p',col.primary);r.setProperty('--s',col.secondary);
+      r.setProperty('--nv',col.navy);r.setProperty('--nv2',col.navy2||col.navy);
+      r.setProperty('--ac',col.accent);r.setProperty('--bg',col.bg);
+    }
+    if(prodsDoc.exists&&prodsDoc.data().list&&prodsDoc.data().list.length){
+      products=prodsDoc.data().list;
+      try{localStorage.setItem('storeProducts',JSON.stringify(products));}catch(e){}
+    }
+  }catch(e){console.warn('initStore:',e);}
+  buildAll();updateLoginBtn();
+  startStoreListeners(); // بدء المستمعات اللحظية
+}
+
+
 
 // رقم الطلب التسلسلي من Firestore
 async function getNextOrderNum(){
@@ -1082,11 +1140,12 @@ async function openMyOrders(){
 let _toastT;
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_toastT);_toastT=setTimeout(()=>t.classList.remove('show'),2600);}
 
-// ── LIVE SYNC ──
+// ── LIVE SYNC (localStorage fallback) ──
 window.addEventListener('storage',e=>{if(e.key==='storeConfig'||e.key==='storeProducts')location.reload();});
 
-// ── INIT ──
-buildAll();updateLoginBtn();
+// ── INIT — Firestore أولاً ──
+initStore();
+
 </script>
 </body>
 </html>
