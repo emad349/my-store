@@ -241,10 +241,10 @@ textarea.fi{resize:vertical;min-height:70px;}
       <div><div class="lcard-name">لوحة التحكم</div></div>
     </div>
     <p class="l-sub">سجّل دخولك للمتابعة</p>
-    <div class="lg"><label class="ll">اسم المستخدم</label><input type="text" class="li" id="lu" value="admin" placeholder="admin"></div>
-    <div class="lg"><label class="ll">كلمة المرور</label><input type="password" class="li" id="lp" value="1234" placeholder="••••••••"></div>
+    <div class="lg"><label class="ll">اسم المستخدم</label><input type="text" class="li" id="lu" value="aabbuuooamad@gmail.com" placeholder="admin"></div>
+    <div class="lg"><label class="ll">كلمة المرور</label><input type="password" class="li" id="lp" value="Aa121314@" placeholder="••••••••"></div>
     <button class="btn-ls" onclick="doLogin()">دخول ←</button>
-    <p class="l-hint">admin / 1234</p>
+    <p class="l-hint">aabbuuooamad@gmail.com / Aa121314@</p>
   </div>
 </div>
 
@@ -562,7 +562,7 @@ textarea.fi{resize:vertical;min-height:70px;}
     <div class="page" id="pg-account">
       <div class="card"><div class="card-hd"><div class="card-ttl">🔒 الحساب والأمان</div><button class="btn btn-pri btn-md" onclick="saveAccount()">💾 حفظ</button></div>
         <div class="card-body">
-          <div class="fg"><label class="fl">اسم المستخدم</label><input type="text" class="fi" id="acc-user" value="admin"></div>
+          <div class="fg"><label class="fl">اسم المستخدم</label><input type="text" class="fi" id="acc-user" value="aabbuuooamad@gmail.com"></div>
           <div class="fg"><label class="fl">كلمة المرور الجديدة</label><input type="password" class="fi" id="acc-pass" placeholder="اتركه فارغاً للإبقاء على الحالية"></div>
           <div class="fg"><label class="fl">تأكيد كلمة المرور</label><input type="password" class="fi" id="acc-pass2"></div>
         </div>
@@ -747,7 +747,7 @@ function stopRealtimeListeners(){_unsubs.forEach(u=>u&&u());_unsubs=[];}
 // ═══════════════════════════════════════
 //  CREDENTIALS (changeable)
 // ═══════════════════════════════════════
-let CREDS = { user:'admin', pass:'1234' };
+let CREDS = { user:'aabbuuooamad@gmail.com', pass:'Aa121314@' };
 try { const c=localStorage.getItem('dashCreds'); if(c) CREDS=JSON.parse(c); } catch(e) {}
 
 // ═══════════════════════════════════════
