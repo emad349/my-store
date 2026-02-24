@@ -81,23 +81,27 @@ header{background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:0;z
 .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
 .pc{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--bd);transition:all .25s;cursor:pointer;display:flex;flex-direction:column;}
 .pc:hover{box-shadow:0 12px 40px rgba(109,40,217,.12);transform:translateY(-4px);border-color:rgba(109,40,217,.2);}
-.pth{aspect-ratio:1;background:linear-gradient(135deg,#f0ebff,#e0f2fe);display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;}
-.pbdg{position:absolute;top:10px;right:10px;padding:.2rem .55rem;border-radius:6px;font-size:.7rem;font-weight:700;}
+.pth{aspect-ratio:16/9;background:linear-gradient(135deg,#f0ebff,#e0f2fe);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden;}
+html.dark .pth{background:linear-gradient(135deg,#1e2440,#172040);}
+.pbdg{position:absolute;top:10px;right:10px;padding:.25rem .65rem;border-radius:7px;font-size:.72rem;font-weight:700;}
 .bnn{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;}
 .bns{background:#fee2e2;color:var(--re);}
 .bnh{background:#fef3c7;color:#92400e;}
-.wbtn{position:absolute;top:10px;left:10px;background:#fff;border:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1);font-size:.9rem;}
-.dcbdg{position:absolute;bottom:8px;right:8px;background:rgba(13,16,53,.82);color:var(--ac);font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:5px;}
-.pb{padding:.9rem;flex:1;display:flex;flex-direction:column;}
-.pnm{font-size:.88rem;font-weight:700;margin-bottom:.3rem;line-height:1.4;}
-.prt{display:flex;align-items:center;gap:.3rem;margin-bottom:.5rem;}
-.sts{color:var(--st);font-size:.8rem;}
+.wbtn{position:absolute;top:10px;left:10px;background:#fff;border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:.95rem;transition:all .2s;}
+.wbtn:hover{transform:scale(1.1);}
+.dcbdg{position:absolute;bottom:10px;right:10px;background:rgba(13,16,53,.82);color:var(--ac);font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:6px;display:flex;align-items:center;gap:.25rem;}
+.pb{padding:1rem;flex:1;display:flex;flex-direction:column;gap:.35rem;}
+.pnm{font-size:.92rem;font-weight:800;line-height:1.4;color:var(--nv);}
+html.dark .pnm{color:var(--tx);}
+.prt{display:flex;align-items:center;gap:.3rem;}
+.sts{color:var(--st);font-size:.82rem;letter-spacing:.05em;}
 .rc{font-size:.75rem;color:var(--gr);}
-.ppr{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.ppr{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:.4rem;border-top:1px solid var(--bd);}
+html.dark .ppr{border-color:var(--bd);}
 .pp{font-size:1.05rem;font-weight:900;color:var(--p);}
-.po{font-size:.78rem;color:var(--gr);text-decoration:line-through;}
-.abtn{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border:none;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.05rem;flex-shrink:0;transition:all .2s;}
-.abtn:hover{transform:scale(1.1);}
+.po{font-size:.75rem;color:var(--gr);text-decoration:line-through;}
+.abtn{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border:none;width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0;transition:all .2s;}
+.abtn:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(109,40,217,.35);}
 .promo{border-radius:16px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;}
 .promo-c{position:relative;z-index:1;}
 .promo-tag{display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;padding:.25rem .7rem;border-radius:50px;margin-bottom:.6rem;}
@@ -330,6 +334,36 @@ html.dark .rev-card{background:#131729;border-color:var(--bd);}
 .rev-text{font-size:.85rem;color:var(--tx2);margin-top:.4rem;line-height:1.6;}
 .rev-form{background:#f8f7ff;border-radius:14px;padding:1.2rem;margin-top:1rem;}
 html.dark .rev-form{background:#1e2440;}
+html.dark .rnm{color:var(--tx);}
+html.dark .rtx{color:var(--tx2);}
+html.dark .pfp-back{background:#1e2440;border-color:var(--bd);color:var(--tx);}
+html.dark .pfp-title{color:var(--tx);}
+html.dark #prodFullPage{background:var(--bg);}
+html.dark #catPage{background:var(--bg);}
+html.dark .ci-nm{color:var(--tx);}
+html.dark .csum .crow{color:var(--tx2);}
+html.dark .csum .crow.tot{color:var(--tx);}
+html.dark .pay-opt{color:var(--tx);background:#1e2440;}
+html.dark .pay-opt.sel{background:rgba(109,40,217,.15);}
+html.dark .rev-card{background:#131729;border-color:var(--bd);}
+html.dark .rev-author{color:var(--tx);}
+html.dark .rev-text{color:var(--tx2);}
+html.dark .pfp-divider{border-color:var(--bd);}
+html.dark #ls-tabs{background:#1e2440 !important;}
+html.dark #ls-tabs button:not([style*="linear-gradient"]){color:var(--tx2);}
+html.dark .hnav a{color:var(--tx2);}
+html.dark .hnav a:hover,html.dark .hnav a.act{color:var(--p);}
+html.dark #darkBtn{background:#131729;border-color:var(--bd);}
+html.dark .pfp-actions>div{background:#1e2440;border-color:var(--bd);}
+html.dark .pfp-actions>div button{color:var(--p);}
+html.dark .pfp-actions>div span{color:var(--tx);}
+html.dark h2,html.dark .pfp-meta h2{color:var(--tx);}
+html.dark .pfp-price-big{color:var(--p);}
+html.dark .pfp-body p{color:var(--tx2);}
+html.dark .myOrdersSheet .sh-body>div>div{background:#131729 !important;border-color:var(--bd) !important;}
+html.dark .sh-body .fl{color:var(--tx2);}
+html.dark .see-all{border-color:rgba(167,139,250,.3);}
+
 </style>
 </head>
 <body>
@@ -361,9 +395,9 @@ const FIREBASE_CONFIG = {
 //  سجّل في emailjs.com ← My Account ← API Keys
 // ══════════════════════════════════════════════
 const EMAILJS_CONFIG = {
-  publicKey:   'zACu5NTEc2BBCU_4B',    // من صفحة Account → API Keys
-  serviceId:   'service_4f3qbkm',    // من Email Services
-  templateId:  'template_16afteh',   // من Email Templates
+  publicKey:   'YOUR_PUBLIC_KEY',    // من صفحة Account → API Keys
+  serviceId:   'YOUR_SERVICE_ID',    // من Email Services
+  templateId:  'YOUR_TEMPLATE_ID',   // من Email Templates
 };
 emailjs.init(EMAILJS_CONFIG.publicKey);
 </script>
@@ -497,12 +531,12 @@ emailjs.init(EMAILJS_CONFIG.publicKey);
 
         <div class="fg" id="ls1-name-row" style="display:none;">
           <label class="fl">الاسم الكامل</label>
-          <input type="text" class="fi" id="regName" placeholder="محمد عبدالله">
+          <input type="text" class="fi" id="regName" placeholder="محمد عبدالله الأحمدي (الاسم الثلاثي)">
         </div>
 
         <div class="fg">
           <label class="fl">البريد الإلكتروني</label>
-          <input type="email" class="fi" id="emailF" placeholder="example@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doSendOTP()">
+          <input type="email" class="fi" id="emailF" placeholder="بريدك@gmail.com" autocomplete="email" onkeydown="if(event.key==='Enter')doSendOTP()">
         </div>
 
         <button class="btn-pri" id="sendOtpBtn" onclick="doSendOTP()">إرسال رمز التحقق 📧</button>
@@ -806,14 +840,47 @@ function emailToUid(email){
 /* ── إرسال رمز OTP ── */
 async function doSendOTP(isResend=false){
   const email = document.getElementById('emailF').value.trim();
-  if(!email || !/\S+@\S+\.\S+/.test(email)){
-    showToast('يرجى إدخال بريد إلكتروني صحيح');
+
+  // التحقق من صحة الإيميل (يجب أن يكون بصيغة xxx@xxx.xxx)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if(!email || !emailRegex.test(email)){
+    showToast('❌ يرجى إدخال بريد إلكتروني صحيح مثل: example@gmail.com');
+    document.getElementById('emailF').focus();
     return;
   }
 
   if(_authMode==='register'){
     const nm=document.getElementById('regName').value.trim();
     if(!nm){showToast('يرجى إدخال اسمك أولاً');document.getElementById('regName').focus();return;}
+    // التحقق من الاسم الثلاثي (3 كلمات على الأقل)
+    const nameParts = nm.split(/\s+/).filter(Boolean);
+    if(nameParts.length < 3){
+      showToast('❌ يرجى إدخال الاسم الثلاثي كاملاً');
+      document.getElementById('regName').focus();
+      return;
+    }
+  }
+
+  if(_authMode==='login' && !isResend){
+    // التحقق من وجود الحساب قبل إرسال OTP
+    const uid = emailToUid(email);
+    try{
+      const doc = await fbDb.collection('customers').doc(uid).get();
+      if(!doc.exists){
+        // لا يوجد حساب — عرض رسالة وتحويل لإنشاء حساب
+        showToast('❌ لا يوجد حساب بهذا البريد');
+        // عرض رسالة داخل الشيت
+        const welcome = document.getElementById('ls1-welcome');
+        if(welcome){
+          welcome.style.display='block';
+          welcome.style.background='rgba(239,68,68,.08)';
+          welcome.style.borderColor='rgba(239,68,68,.2)';
+          welcome.style.color='var(--re)';
+          welcome.innerHTML='❌ لا يوجد لديك حساب — يرجى إنشاء حساب أولاً <span style="color:var(--p);cursor:pointer;font-weight:800;text-decoration:underline;" onclick="switchAuthTab(\'register\')">إنشاء حساب</span>';
+        }
+        return;
+      }
+    }catch(e){ /* تجاهل خطأ الاتصال وأكمل */ }
   }
 
   const btn=document.getElementById('sendOtpBtn');
@@ -834,16 +901,16 @@ async function doSendOTP(isResend=false){
     });
 
     // إرسال الرمز عبر EmailJS
-   await emailjs.send(
-  EMAILJS_CONFIG.serviceId,
-  EMAILJS_CONFIG.templateId,
-  {
-    to_email  : customer_email,  // ✅ إيميل العميل
-    otp_code  : code,
-    store_name: C?.meta?.name || 'متجري',
-    expiry_min: '10'
-  }
-);
+    await emailjs.send(
+      EMAILJS_CONFIG.serviceId,
+      EMAILJS_CONFIG.templateId,
+      {
+        to_email : email,
+        otp_code : code,
+        store_name: C?.meta?.name || 'متجري',
+        expiry_min: '10'
+      }
+    );
 
     // الانتقال للخطوة الثانية
     document.getElementById('ls1').style.display='none';
@@ -1149,9 +1216,10 @@ function renderProds(list,gid){
   g.innerHTML=list.filter(p=>p.active).map(p=>{
     const avail=p.codeType!=='none'?p.codes.filter(c=>!c.used).length:null;
     const sold=avail===0;
+    const disc=p.oldPrice?Math.round((1-p.price/p.oldPrice)*100):0;
     return `<div class="pc" onclick="${sold?'':'openProd('+p.id+')'}" style="${sold?'opacity:.65;':''}">
       <div class="pth">
-        ${p.badge==='new'?'<span class="pbdg bnn">جديد</span>':''}${p.badge==='sale'?'<span class="pbdg bns">تخفيض</span>':''}${p.badge==='hot'?'<span class="pbdg bnh">🔥 الأكثر</span>':''}
+        ${p.badge==='new'?'<span class="pbdg bnn">جديد</span>':p.badge==='sale'?'<span class="pbdg bns">-'+disc+'%</span>':p.badge==='hot'?'<span class="pbdg bnh">🔥 الأكثر</span>':''}
         <button class="wbtn" onclick="event.stopPropagation();showToast('❤️ تمت الإضافة للمفضلة')">♡</button>
         ${p.emoji}
         ${p.codeType!=='none'?`<div class="dcbdg">${p.codeType==='account'?'👤':'🔑'} ${avail} متاح</div>`:''}
@@ -1160,7 +1228,10 @@ function renderProds(list,gid){
         <div class="pnm">${p.name}</div>
         <div class="prt"><span class="sts">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span><span class="rc">(${p.rCount})</span></div>
         <div class="ppr">
-          <div><div class="pp">${p.price} ${cur}</div>${p.oldPrice?`<div class="po">${p.oldPrice} ${cur}</div>`:''}</div>
+          <div>
+            <div class="pp">${p.price} ${cur}</div>
+            ${p.oldPrice?`<div class="po">${p.oldPrice} ${cur}</div>`:''}
+          </div>
           ${sold?'<span style="font-size:.75rem;color:var(--re);font-weight:700;">نفد</span>':`<button class="abtn" onclick="event.stopPropagation();quickAdd(${p.id})">+</button>`}
         </div>
       </div>
