@@ -901,14 +901,14 @@ async function doSendOTP(isResend=false){
     });
 
     // إرسال الرمز عبر EmailJS
-    await emailjs.send(
+ await emailjs.send(
   EMAILJS_CONFIG.serviceId,
   EMAILJS_CONFIG.templateId,
   {
-    customer_email : email,
-    otp_code       : code,
-    store_name     : C?.meta?.name || 'متجري',
-    expiry_min     : '10'
+    to_email      : email,   // <— هذا ضروري
+    otp_code      : code,
+    store_name    : C?.meta?.name || 'متجري',
+    expiry_min    : '10'
   }
 );
 
